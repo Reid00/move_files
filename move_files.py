@@ -33,53 +33,47 @@ class MoveFiles:
         # target_path = r'D:\v-baoz\label\images'
         # divide_num = 20
 
-    def mkfolder(self, target_path, divide_num):
-        sort_folder_number = [x for x in range(0, divide_num)]
+    def mkdirs(self):
+        sort_folder_number = [x for x in range(0, int(self.divide_num))]
         for number in sort_folder_number:
-            new_folder_path = os.path.join(target_path, '{}'.format(number))  # new_folder_path is ‘folderPath\number'
+            new_folder_path = os.path.join(self.target_path,
+                                           '{}'.format(number))  # new_folder_path is ‘folderPath\number'
             if not os.path.exists(new_folder_path):
                 os.makedirs(new_folder_path)
                 print("new a floder named " + str(number) + ' at the path of ' + new_folder_path)
-        target_path_list = os.listdir(target_path)
-        yield target_path_list
+        for root, dirs, files in os.walk(self.target_path):
+            target_path_list = [os.path.abspath(os.path.join(self.target_path, dir)) for dir in dirs]
+            # target_path_list = [os.path.join(self.target_path, foldername) for foldername in os.listdir(self.target_path)]
+            if target_path_list:
+                print(target_path_list)
+                print('target_path_list print done')
+                return target_path_list
 
-    def get_files_path(self, original_path):
+    def get_default_path(self):
         # get the original abspath
         original_abspath_list = []
-        for root, dirs, files in os.walk(original_path):
-            single_abspath = os.path.abspath(files)
-            original_abspath_list.append(single_abspath)
-            yield original_abspath_list
+        for root, dirs, files in os.walk(self.original_path):
+            original_abspath_list = [os.path.join(root, file) for file in files]
+            print(original_abspath_list)
         print('abspath store done')
+        return original_abspath_list
 
-    def move_files(self, original_path, target_path):
-        for original in original_abspath_list:
-
-            if not os.path.exists(new_file_path):
-                print('not exist path:' + new_file_path)
+    def move_files(self, original_abspath_list, target_path_list):
+        for i in range(self.divide_num):
+            if not os.path.exists(target_path_list[i]):
+                print('not exist path:' + target_path_list[i])
                 break
-            shutil.move(old_file_path, new_file_path)
-            print('success move file from ' + old_file_path + ' to ' + new_file_path)
+            number = int(len(original_abspath_list)) / int(self.divide_num)
+            for item in range(int(i * number), int(i * number + number)):
+                if not os.path.exists(original_abspath_list[item]):
+                    print('original path not exist files: ' + original_abspath_list[item])
+                    continue
+                shutil.move(original_abspath_list[item], target_path_list[i])
+                print('success move file from ' + original_abspath_list[item] + ' to ' + target_path_list[i])
 
-    print('there are ' + str(len(file_list)) + ' files at the path of ' + path)
-    for i in range(0, len(file_list)):
-        old_file_path = os.path.join(path, file_list[i])
-        if os.path.isdir(old_file_path):
-            '''if the path is a folder,program will pass it'''
-            print('img does not exist ,path=' + old_file_path + ' it is a dir')
-            pass
-        elif not os.path.exists(old_file_path):
-            '''if the path does not exist,program will pass it'''
-            print('img does not exist ,path=' + old_file_path)
-            pass
-        else:
-            '''define the number,it decides how many imgs each people process'''
-            number = 150  # int(len(file_list)/peopleNumber)
-            if (i % number == 0):
-                folderNumber += 1
-            new_file_path = os.path.join(folderPath, '%s' % (folderNumber))
-            if not os.path.exists(new_file_path):
-                print('not exist path:' + new_file_path)
-                break
-            shutil.move(old_file_path, new_file_path)
-            print('success move file from ' + old_file_path + ' to ' + new_file_path)
+
+if __name__ == '__main__':
+    test = MoveFiles(r'D:\v-baoz\test\original', r'D:\v-baoz\test\target', 10)
+    target_path_list = test.mkdirs()
+    original_abspath_list = test.get_default_path()
+    test.move_files(original_abspath_list, target_path_list)
