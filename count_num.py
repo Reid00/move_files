@@ -1,4 +1,5 @@
 import os
+import re
 
 
 class CountFilesNum:
@@ -14,5 +15,5 @@ class CountFilesNum:
 
 
 if __name__ == '__main__':
-    count = CountFilesNum(r'D:\v-baoz\test\target')
+    count = CountFilesNum(r'C:\Users\v-baoz\OneDrive\editPicatureFinished-MS-201705171604\浮世绘')
     count.count_num()
