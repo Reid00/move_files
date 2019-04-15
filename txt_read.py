@@ -24,7 +24,8 @@ class ReadCsv:
         df = pd.read_csv(self.path, sep=',', header=0, encoding='utf-8')
         df1 = df.dropna()
         df1.to_csv('airport_dropna.csv', index=False, header=None)
-
+        df2 = df.fillna(value=0)
+        df2.to_csv('airport_fillna.csv', index=False, header=None)
         pattern = re.compile(r'/aviation_airport/([^_]+)')
         new_sk = []
         for sk in df['SubjectKey']:
