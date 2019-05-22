@@ -1,0 +1,4 @@
+1	tony	15age
+3	andy	18age
+5	sandy	21age
+6	not in
