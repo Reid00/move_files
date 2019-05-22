@@ -61,7 +61,7 @@ class ReadCsv:
         # print([df1['id'] > 0])  # suggest use this method to get columns
         # print([df1.id > 0])  # not suggest get the column
         # print(df1[df1['id'] > 0])  # use this method filter some data
-        print(df1[df1['id'] > 0][['name', 'age']])  # use this method filter columns
+        # print(df1[df1['id'] > 0][['name', 'age']])  # use this method filter columns
         # print(df1[df1['id'] > 0]['name', 'age'])  # this method is wrong
         df4 = df1[~df1['id'].isin(df2['id'])]  # filter column  is not exsit in another DataFrame
         df5 = df1[df1['id'].isin(df2['id'])]  # filter column  exsit in another DataFrame
@@ -69,7 +69,7 @@ class ReadCsv:
         df5.to_csv('./output/in.csv', index=False, header=True, columns=['id'])
         df3 = pd.merge(df1, df2, how='outer', on='id')
         df3.to_csv('./output/outer_join.csv', index=False, header=True, )
-        not_in_1 = df3.drop(df2.index)
+        not_in_1 = df3.drop(df1.index)
         # print('not in \n', not_in_1)
         not_in_1.to_csv('./output/not_in_1.csv', index=False, header=True, columns=['id', 'name_x', 'name_y'])
 
